@@ -2,8 +2,114 @@
 name: 发布版本
 sort: 2
 ---
+# beego 1.6.1
+新增功能：
+1. ORM支持Oracle驱动
+2. ORM的Model支持inline
+3. Cache支持ssdb引擎
+4. console支持颜色输出配置
+5. 添加travis的自动化集成测试
+6. 日志新增mulitfile引擎，支持不同级别的输出到不同的文件
+
+bugfix：
+1. cookie时间设置
+2. 路由规则里面的匹配 [#1580](https://github.com/astaxie/beego/issues/1580)
+3. 在beego.Run()之前没有log输出
+4. config获取[]string为空的时候返回为空，应该返回nil
+5. ini接口保存的时候需要注释不正确
+6. 异步存储日志的时候时间可能延迟的问题
+7. 配置文件解析两次，导致部署key获取失败
+8. 正则路由无法解析本身带有`()`的问题
+9. mail发送中文附件和title乱码的问题
+10. ORM里面缺少Distinct的接口定义
+11. Layout编译失败
+12. logrotate的时候文件名不正确
+13. CORS插件失败的时候不生效
+14. filters的路径参数和路由参数冲突
+15. 静态文件找不到返回200，应该返回404
+16. 添加GroupBy的interface支持
+17. Go1.6的并发访问map引起静态文件换成崩溃
+18. httplib JSONBody输出的时候采用json.Encoder会输出一个额外的换行符
+19. 异步模式下，log调用flush，Close的时候日志丢失
+
+# beego 1.6.0
+新功能：
+
+1. 文件log支持rotate支持类似`xx.2013-01-01.2.log`这样的输出 [#1265](https://github.com/astaxie/beego/pull/1265)
+2. context.response 支持了原生的Flush，Hijack，CloseNotify
+3. ORM支持Distinct操作 [#1276](https://github.com/astaxie/beego/pull/1276)
+4. 新增加模板函数map_get [#1305](https://github.com/astaxie/beego/pull/1305)
+5. ORM支持tidb引擎 [#1366](https://github.com/astaxie/beego/pull/1366)
+6. httplib请求参数支持[]string [#1308](https://github.com/astaxie/beego/pull/1308)
+7. ORM querySeter添加GroupBy方法 [#1345](https://github.com/astaxie/beego/pull/1345)
+8. Session的MySQL引擎支持自定义表名 [#1348](https://github.com/astaxie/beego/pull/1348)
+9. log的file引擎性能提升30%，同时支持自定义创建的文件权限 [#1560](https://github.com/astaxie/beego/pull/1560)
+10. session支持通过query获取 [#1507](https://github.com/astaxie/beego/pull/1507)
+11. Cache模块支持多个Cache对象，之前调用NewCache获取的是同一个Cache，现在会初始化不同的Cache对象。
+12. validation支持自定义验证函数
+
+bugfix:
+
+1. context里面bind函数如果参数为空crash [#1245](https://github.com/astaxie/beego/issues/1245)
+2. ORM中manytomany获取reverse的时候出错。[#671](https://github.com/astaxie/beego/issues/671)
+3. http: multiple response.WriteHeader calls [#1329](https://github.com/astaxie/beego/pull/1329)
+4. ParseForm解析日期使用当前的timezone [#1343](https://github.com/astaxie/beego/pull/1343)
+5. log引擎里面Smtp发送邮件无法认证
+6. 修复路由规则的一些issue: `/topic/:id/?:auth`, `/topic/:id/?:auth:int` [#1349](https://github.com/astaxie/beego/pull/1349)
+7. 修复注释文档解析的时候nil引起crash [#1367](https://github.com/astaxie/beego/pull/1367)
+8. static目录下的index.html无法读取[#1508](https://github.com/astaxie/beego/pull/1508)
+9. dbBase.Update失败不返回err [#1384](https://github.com/astaxie/beego/pull/1384)
+10. validation里面设置的Required只对int有效，int64无效
+11. ORM创建外键是string类型的主键时创建varchar(0)的字符问题 [#1379](https://github.com/astaxie/beego/pull/1379)
+12. graceful同时开启http和https的时候出错 [#1414](https://github.com/astaxie/beego/pull/1414)
+13. ListenTCP4开启之后如果httpaddr为空还是监控TCP6
+14. migration不支持postgres [#1434](https://github.com/astaxie/beego/pull/1434)
+15. ORM text、bool等默认值问题导致创建表出错
+16. graceful导致panic问题 negative WaitGroup counter
+
+优化:
+
+1. example 移到了 [samples](https://github.com/beego/samples)
+2. 所有代码符合golint规范
+3. 重写路由树底层，性能提升三倍左右
+4. 每次请求的context采用sync.Pool复用，内存和性能提升
+5. 模板编译优化速度，按需编译 [#1298](https://github.com/astaxie/beego/pull/1298)
+6. 优化了beego的配置管理，采用统一的BConfig，更易读易管理
+7. 优化了beego的整体结构代码，使得代码更易读维护
+8. 所有初始化的信息统一到AddAPPStartHook函数中去，易于管理
+9. 移除了middleware，之后全部采用plugins来管理插件
+10. 重构Error处理，使得Error更加易懂
+
+# beego 1.5.0
+新功能:
+
+1. 优雅重启模块：grace
+2. httplib增加JsonBody函数，支持raw body以Json格式发送
+3. context input增加 AcceptsHtml AcceptsXml AcceptsJson 函数
+4. 配置文件优先从Runmode中获取
+5. httplib 支持gzip
+6. Log模块默认不采用异步方式
+7. validation 增加循环嵌套验证
+8. 增加apk mime
+9. ORM支持eq和ne
+
+bugfix:
+
+1. ledis驱动的参数错误
+2. 当页面放置一段时间，验证码将从缓存中失效。当用户再来刷新验证码将出现验证码404。对于reload操作应该直接生成验证码。
+3. Controller定义Error异常
+4. 修复cookie无法在window下的IE正常工作
+5. GetInt函数当获取不存在的变量是返回nil错误
+6. 增加更多的手机验证码方式
+7. 修复路由的匹配问题
+8. panic返回 http 200
+9. redis session引起数据库设置错误
+10. https和http 直接的session无法共享
+11. memcache session引擎当没有数据的时候返回错误
+
 # beego 1.4.3
 新功能:
+
 1. ORM数据库创建和修改的时候支持default设置
 2. 改进日志文件行数统计
 3. sesesion ledis支持选择数据库
@@ -17,6 +123,7 @@ sort: 2
 11. 改进ORM interface，可以模拟interface
 
 bugfix:
+
 1. context subdomain获取的子域名不正确
 2. beego.AppConfig.Strings 当数据为空时判定不正确
 3. utils/pagination 修复不能修改分页属性
@@ -397,7 +504,7 @@ beego.Run("127.0.0.1:8089")
 
 #### 2.beego支持更加自由化的路由方式
 
-RESTFul的自定义函数
+RESTful的自定义函数
 
 - beego.Get(router, beego.FilterFunc)
 - beego.Post(router, beego.FilterFunc)

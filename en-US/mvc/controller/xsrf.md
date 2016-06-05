@@ -5,30 +5,30 @@ sort: 4
 
 # Cross-site request forgery
 
-[Cross-site request forgery](http://en.wikipedia.org/wiki/Cross-site_request_forgery) is well known as XSRF. It is a very important security problem in web development. The wikipedia page talked about it in detail. 
+[Cross-site request forgery](http://en.wikipedia.org/wiki/Cross-site_request_forgery) is well known as XSRF. It is a very important security problem in web development. The Wikipedia page explains it in detail.
 
-One of the common solutions to prevent XSRF is to record an unpredictable cookie for each user and each request (POST/PUT/DELETE) must have this cookie. If the cookie doesn't match, the request is probably a forged request.
+One of the most common solutions to prevent XSRF is to record an unpredictable cookie for each user and each request (POST/PUT/DELETE) must have this cookie. If the cookie doesn't match, the request is probably a forged request.
 
-Beego has buildin XSRF protection. If you want to use it, you can either `enablexsrf` in your configuration file:
+Beego has built-in XSRF protection. If you want to use it, you can either set `enablexsrf = true` in your configuration file:
 
     enablexsrf = true
     xsrfkey = 61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o
-    xsrfexpire = 3600   
+    xsrfexpire = 3600 // set cookie expire in 3600 seconds, default to 60 seconds if not specified
 
-or enable it in main enter function:
+or enable it in the main application entry function:
 
     beego.EnableXSRF = true
     beego.XSRFKEY = "61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o"
-    beego.XSRFExpire = 3600  //过期时间，默认60秒
-    
-With XSRF enabled Beego will set a cookie `_xsrf` (expire in 60 seconds by default) for every user. If this cookie doesn't exist in a `POST`, `PUT`, or `DELETE` request, Beego will refuse the request. If you enabled XSRF protection, you need to add a field to provide `_xsrf` value to every form. You can directly use `XsrfFormHtml()` in the template to set it.
+    beego.XSRFExpire = 3600
+
+With XSRF enabled, Beego will set a cookie `_xsrf` for every user. If this cookie doesn't exist in a `POST`, `PUT`, or `DELETE` request, Beego will refuse the request. If you enabled XSRF protection, you need to add a field to provide `_xsrf` value to every form. You can directly add `XSRFFormHTML()` in the template to set it.
 
 We also set the global expiration time by `beego.XSRFExpire`. We can still change it in controllers for some particular logic:
 
 ```go
-func (this *HomeController) Get(){ 
-	this.XSRFExpire = 7200    
-	this.Data["xsrfdata"]=template.HTML(this.XsrfFormHtml())
+func (this *HomeController) Get(){
+	this.XSRFExpire = 7200
+	this.Data["xsrfdata"]=template.HTML(this.XSRFFormHTML())
 }
 ```
 
@@ -37,12 +37,12 @@ func (this *HomeController) Get(){
 Set data in controller:
 
 ```go
-func (this *HomeController) Get(){        
-    this.Data["xsrfdata"]=template.HTML(this.XsrfFormHtml())
+func (this *HomeController) Get(){
+    this.Data["xsrfdata"]=template.HTML(this.XSRFFormHTML())
 }
 ```
 
-Then use it in template:  
+Then use it in template:
 
     <form action="/new_message" method="post">
       {{ .xsrfdata }}
@@ -72,24 +72,24 @@ jQuery.postJSON = function(url, args, callback) {
 
 #### Extending jQuery
 
-Add `xsrf` to every request header by extending ajax.
+Add `xsrf` to every request header by extending AJAX.
 
 You need to save the `_xsrf` value in html:
 
 ```go
-func (this *HomeController) Get(){        
-    this.Data["xsrf_token"] = this.XsrfToken()
+func (this *HomeController) Get(){
+    this.Data["xsrf_token"] = this.XSRFToken()
 }
 ```
 
-You can put it into head:
+You can put it into the head:
 
 ```html
 <head>
     <meta name="_xsrf" content="{{.xsrf_token}}" />
 </head>
 ```
-Extending ajax method, adding `_xsrf` into header. This also support jQuery methods which are using ajax internally such as post and get.
+Extending ajax method, adding `_xsrf` into header. This also supports jQuery methods which are using AJAX internally such as POST and GET.
 
 ```js
 var ajax = $.ajax;
@@ -113,13 +113,13 @@ $.extend({
 });
 ```
 
-For PUT and DELETE requests and POST methods which don't use form content as parameters, you can pass XSRF token by X-XSRFToken in HTTP header.
+For PUT and DELETE requests and POST requests which don't use form content as parameters, you can pass XSRF token by X-XSRFToken in HTTP header.
 
-If you need to customize XSRF behavior for different request, you can overwrite CheckXsrfCookie method of Controller. For example you need a API which doesn't support XSRF, you can disable XSRF proction by set `CheckXsrfCookie()` to empty. However, if you need to let the request with cookie support and without cookie support at the same time and current request is validated by cookie, it's important to use XSRF protection.
+If you need to customize XSRF behavior for different requests, you can overwrite the CheckXSRFCookie method of the Controller. For example if you need an API which doesn't support XSRF, you can disable XSRF proction by setting `CheckXSRFCookie()` to empty. However, if you need to accommodate requests with and without cookie support at the same time and the request is validated by cookie, then it's important to use XSRF protection.
 
 ## support controller setting
 
-`XSRF` is a global variable, if you set it to true, all the request will validated. but sometimes API don't need validated. So you can controller it in the controllers:
+`XSRF` is a global variable,  so if you set it to `true`, then every request will be validated. But sometimes, APIs don't need to be validated, then you can set XSRF to `false` in controllers:
 
 ```
 type AdminController struct{
@@ -130,4 +130,3 @@ func (a *AdminController) Prepare() {
 	a.EnableXSRF = false
 }
 ```
-

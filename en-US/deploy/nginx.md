@@ -1,11 +1,12 @@
 ---
-name: Deploy with nginx
+name: Deployment with nginx
 sort: 3
 ---
 
-# Deploy with Nginx
+# Deployment with Nginx
 
-Go is a stand alone http server, but we want to nginx to do more for us such as logging, cc attack and static file serve, because nginx is doing good as a web server. Go can just focus on functionalities and logic. We can use nginx proxy to deploy multiple application at the same time. Here is a example for two applications share the 80 port but different domain, and forward to different application by nginx.
+Go already has a standalone http server. But we still want to have nginx to do more for us such as logging, CC attack and act as a static file server because nginx performs well as a web server. 
+So Go can just focus on functionality and logic. We can also use the nginx proxy to deploy multiple applications at the same time. Here is an example of two applications that share port 80 but have different domains, and requests are forwarding to different applications by nginx.
 
 ```
 server {

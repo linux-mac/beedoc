@@ -5,49 +5,30 @@ sort: 1
 
 # Live Monitor
 
-We talked about toolbox module before. It will listen `127.0.0.1:8088` by default when application is running. It can't be accessed from internet but you can visit it by other ways such as nginx proxy.
+We discussed the toolbox module before. It will listen on `127.0.0.1:8088` by default when the application is running. It can't be accessed from the internet but you can browse to it by other means such as by nginx proxy.
 
->>> For security reason it is recommend to block 8088 in firewall.
+>>> For security reason it is recommend that you block port 8088 in firewall.
 
-Monitor is disabled by default. You can enabled it by:
+Monitor is disabled by default. You can enable it by adding the following line in `conf/app.conf` file:
 
-	beego.EnableAdmin = true
-	
-Also you can change the port it listened:
+	EnableAdmin = true
 
-	beego.AdminHttpAddr = "localhost"
-	beego.AdminHttpPort = 8888
-	
+Also you can change the port it listens on:
+
+	AdminHttpAddr = "localhost"
+	AdminHttpPort = 8088
+
 Open browser and visit `http://localhost:8088/` you will see `Welcome to Admin Dashboard`.
 
-It's the first version now. We will keep on developing it.
-	
 ## Requests statistics
 
-Visit `http://localhost:8088/qps` you will see it:
+Browse to `http://localhost:8088/qps` and you will see the following:
 
-	| requestUrl                                        | method     | times            | used             | max used         | min used         | avg used         |
-	| /                                                 | GET        |  2               | 2.35ms           | 1.30ms           | 1.04ms           | 1.17ms           |
-	| /favicon.ico                                      | GET        |  1               | 79.30us          | 79.30us          | 79.30us          | 79.30us          |
-	| /src/xx                                           | GET        |  1               | 923.09us         | 923.09us         | 923.09us         | 923.09us         |
-	| /src                                              | GET        |  1               | 792.93us         | 792.93us         | 792.93us         | 792.93us         |
-	| /123                                              | GET        |  1               | 906.04us         | 906.04us         | 906.04us         | 906.04us         |
+![](../images/monitoring.png)
 
 ## Performance profiling
 
-There are several params for profiling. Visit `http://localhost:8088/prof` and with params below and you can get different information.
-
-	request url like '/prof?command=lookup goroutine'
-	the command have below types:
-	1. lookup goroutine
-	2. lookup heap
-	3. lookup threadcreate
-	4. lookup block
-	5. start cpuprof
-	6. stop cpuprof
-	7. get memprof
-	8. gc summary
-
+You can also see the information for `goroutine`, `heap`, `threadcreate`, `block`, `cpuprof`, `memoryprof`, `gc summary` and do profiling.
 
 ## Healthcheck
 
@@ -55,7 +36,7 @@ You need to manually register the healthcheck logic to see the status of the hea
 
 ## Tasks
 
-You can add task in your applicaion and check the task status or trigger it manually.
+You can add task in your application and check the task status or trigger it manually.
 
 - Check task status: `http://localhost:8088/task`
 - Run task manually: `http://localhost:8088/runtask?taskname=task_name`

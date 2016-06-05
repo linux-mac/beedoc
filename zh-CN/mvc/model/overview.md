@@ -11,7 +11,7 @@ beego ORM 是一个强大的 Go 语言 ORM 框架。她的灵感主要来自 Dja
 
 目前该框架仍处于开发阶段，可能发生任何导致不兼容的改动。
 
-**已支持数据库：**
+**已支持数据库驱动：**
 
 * MySQL：[github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql)
 * PostgreSQL：[github.com/lib/pq](https://github.com/lib/pq)
@@ -36,6 +36,7 @@ beego ORM 是一个强大的 Go 语言 ORM 框架。她的灵感主要来自 Dja
 
 ## 修改日志
 
+* 2016-01-18: [规范了数据库驱动的命名](orm.md#registerdriver)
 * 2014-03-10: [GetDB](orm.md#getdb) 从注册的数据库中返回 *sql.DB. [ResetModelCache](orm.md#resetmodelcache) 重置已注册的模型struct
 * 2014-02-10: 随着beego1.1.0的发布提交的改进
   - 关于 [时区设置](orm.md#时区设置)
@@ -140,9 +141,9 @@ num, err := qs.Filter("User__Name", "slene").All(&posts)
 
 ```go
 var maps []orm.Params
-num, err := o.Raw("SELECT id FROM user WHERE name = ?", "slene").Values(&maps)
-if num > 0 {
-	fmt.Println(maps[0]["id"])
+num, err := o.Raw("SELECT * FROM user").Values(&maps)
+for _,term := range maps{
+	fmt.Println(term["id"],":",term["name"])
 }
 ```
 

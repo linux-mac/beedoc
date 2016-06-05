@@ -2,33 +2,110 @@
 name: Release Notes
 sort: 2
 ---
-# beego 1.4.3
+# beego 1.6.0
+
+New features:
+
+1. `log` supports rotating files like `xx.2013-01-01.2.log` [#1265](https://github.com/astaxie/beego/pull/1265)
+2. `context.response` supports Flush, Hijack, CloseNotify
+3. ORM supports Distinct [#1276](https://github.com/astaxie/beego/pull/1276)
+4. `map_get` template method [#1305](https://github.com/astaxie/beego/pull/1305)
+5. ORM supports [tidb](https://github.com/pingcap/tidb) engine [#1366](https://github.com/astaxie/beego/pull/1366)
+6. httplib request supports []string [#1308](https://github.com/astaxie/beego/pull/1308)
+7. ORM `querySeter` added `GroupBy`  method [#1345](https://github.com/astaxie/beego/pull/1345)
+8. Session's MySQL engine supports custom table name [#1348](https://github.com/astaxie/beego/pull/1348)
+9. Performance of log's file engine improved 30%; Supports set log file's permission [#1560](https://github.com/astaxie/beego/pull/1560)
+10. Get session by query [#1507](https://github.com/astaxie/beego/pull/1507)
+11. Cache module supports multiple Cache objects.
+12. validation supports custom validation functions
+
+bugfix:
+
+1. `bind` method in `context` caused crash when parameter is empty. [#1245](https://github.com/astaxie/beego/issues/1245)
+2. manytomany in ORM reverse error [#671](https://github.com/astaxie/beego/issues/671)
+3. http: multiple response.WriteHeader calls [#1329](https://github.com/astaxie/beego/pull/1329)
+4. ParseForm uses local timezone while parsing date [#1343](https://github.com/astaxie/beego/pull/1343)
+5. Emails sent by log's SMTP engine can't be authorised
+6. Fixed some issues in router: `/topic/:id/?:auth`, `/topic/:id/?:auth:int` [#1349](https://github.com/astaxie/beego/pull/1349)
+7. Fixed the crash caused by nil while parsing comment documentation. [#1367](https://github.com/astaxie/beego/pull/1367)
+8. Can't read `index.html` in static folder
+9. `dbBase.Update` doesn't return err if failed [#1384](https://github.com/astaxie/beego/pull/1384)
+10. `Required` in `validation` only works for int but not for int64
+11. orm: Fix handling of rel(fk) to model with string pk [#1379](https://github.com/astaxie/beego/pull/1379)
+12. graceful error while both http and https enabled [#1414](https://github.com/astaxie/beego/pull/1414)
+13. If ListenTCP4 enabled and httpaddr is empty, it still listens TCP6
+14. migration doesn't support postgres [#1434](https://github.com/astaxie/beego/pull/1434)
+15. Default values of ORM text, bool will cause error while creating tables.
+16. graceful panic: negative WaitGroup counter
+
+Improvement:
+
+1. Moved example to [samples](https://github.com/beego/samples)
+2. Passed golint
+3. Rewrote router, improved performance by 3 times.
+4. Used `sync.Pool` for `context` to improve performance
+5. Improved template compiling speed. [#1298](https://github.com/astaxie/beego/pull/1298)
+6. Improved config
+7. Refactored whole codebase for readability and maintainability
+8. Moved all init code into `AddAPPStartHook`
+9. Removed `middleware`. Will only use `plugins`
+10. Refactored `Error` handling.
+
+# Beego 1.5.0
 New Features:
+
+1. Graceful shutdown
+2. Added `JsonBody` method to `httplib` which supporting sending raw body as JSON format
+3. Added `AcceptsHtml` `AcceptsXml` `AcceptsJson` methods to `context input`
+4. Get config files from Runmode first
+5. `httplib` supports `gzip`
+6. `log` module stop using asynchronous mode by default
+7. `validation` supports recursion
+8. Added `apk mime`
+9. `ORM` supports `eq` an `ne`
+
+Bugfixes:
+
+1. Wrong parameters for ledis driver.
+2. When user refresh the page after the captcha code expired from the cache, it returns 404. Generating new captcha code for reloading.
+3. Controller defines Error exception
+4. cookie doesn't work in window IE
+5. GetIn returns nil error while getting non-exist variable
+6. More cellphone validation code
+7. Wrong router matching
+8. The `panic` returns http 200
+9. The database setting erros caused by redis session
+10. The issue that https and http don't share session
+11. Memcache session driver returns error if it's empty
+
+# Beego 1.4.3
+New Features:
+
 1. ORM support default settting
 2. improve logs/file line count
 3. sesesion ledis support select db
 4. session redis support select db
 5. cache redis support select db
-6. UrlFor support all type of the parameters
-7. controller GetInt/GetString function support default value, like：GetInt("a",12)
-8. add CompareNot/NotNil template function
+6. `UrlFor` support all type of the parameters
+7. controller `GetInt/GetString` function support default value, like: `GetInt("a",12)`
+8. add `CompareNot/NotNil` template function
 9. support Controller defeine error，[controller Error](http://beego.me/docs/mvc/controller/errors.md#controller%E5%AE%9A%E4%B9%89error)
-10. ParseForm support slices of ints and strings
+10. `ParseForm` support slices of ints and strings
 11. improve ORM interface
 
 bugfix:
 1. context get wrong subdomain
-2. beego.AppConfig.Strings when the strings is empty, always return []string{}
+2. `beego.AppConfig.Strings` when the strings is empty, always return `[]string{}`
 3. utils/pagination can't modify the attributes
-4. whne the request url is empty, route tree crash
+4. when the request url is empty, route tree crashes
 5. can't click the link to run the task in adminui
-6. FASTCGI restart didn't delete the unix Socket file.
+6. FASTCGI restart didn't delete the unix Socket file
 
-# beego 1.4.2
+# Beego 1.4.2
 New Features:
 
 1. Added SQL Constructor inspired by ZEND ORM.
-2. Added `GetInt()`, `GetInt8()`, `GetInt16()`, `GetInt32()`, `GetInt64()` for Controller
+2. Added `GetInt()`, `GetInt8()`, `GetInt16()`, `GetInt32()`, `GetInt64()` for Controller.
 3. Improved the logging. Added `FilterHandler` for filter logging output.
 4. Static folder supports `index.html`. Automatically adding `/` for static folders.
 5. `flash` supports `success` and `set` methods.
@@ -47,17 +124,17 @@ New Features:
 
 9. Added `paginator` utils.
 10. Added `BEEGO_RUNMODE` environment variable. You can change the application mode by changing this environment variable.
-11. Added Json function for fetching `statistics` in `toolbox`
+11. Added Json function for fetching `statistics` in `toolbox`.
 12. Attachements support for mail utils.
-13. Turn on fastcgi by standard IO
+13. Turn on fastcgi by standard IO.
 14. Using `SETEX` command to support the old version redis in redis Session engine.
 15. RenderForm supports html id and class by using id and class tag.
-16. ini config files support BOM head
-17. Added new Session engine `ledis`
-18. Improved file uploading in `httplib`. Supporting extremely large files by using `io.Pipe`
-19. Binding to TCP4 address by default. It will bind to ipv6 in GO.  Added config variable `ListenTCP4`
+16. ini config files support BOM head.
+17. Added new Session engine `ledis`.
+18. Improved file uploading in `httplib`. Supporting extremely large files by using `io.Pipe`.
+19. Binding to TCP4 address by default. It will bind to ipv6 in GO. Added config variable `ListenTCP4`.
 20. off/on/yes/no/1/0 will parse to `bool` in form rendering. Support time format.
-21. Simplify the generating of SeesionID. Using golang buildin `rand` function other than `hmac_sha1`
+21. Simplify the generating of SeesionID. Using golang buildin `rand` function other than `hmac_sha1`.
 
 bugfix:
 
@@ -76,7 +153,7 @@ bugfix:
 14. The information lossing while having many `namespaces` for the commented router. #770
 15. `urlfor` function calling useless {{placeholder}} #759
 
-# beego 1.4.1
+# Beego 1.4.1
 New features:
 
 1. `context.Input.Url` get path info without domain scheme.
@@ -88,10 +165,10 @@ New features:
 bugfix:
 1. Router *.* can't be parsed
 
-# beego 1.3.0
+# Beego 1.3.0
 Hi guys! After the hard working for one month, we are so excited to release Beego 1.3.0. We brought many useful features. [Upgrade notes](http://beego.me/docs/intro/upgrade.md)
 
-## The brand new router system
+#### The brand new router system
 We rewrote the router system to tree router. It improved the performance significantly and supported more formats.
 
 For the routers below:
@@ -101,7 +178,7 @@ For the routers below:
 
 If the request is `/user/astaxie`, it will match fixed router which is the first one; If the request is `/user/slene`, it will match the second one. The register order doesn't matter.
 
-## namespace is more elegant
+#### namespace is more elegant
 `namespace` is designed for modular applications. It was using chain style similar to jQuery in previous version but `gofmt` can't format it very well. Now we are using multi parameters style: (The chain style still works)
 
 ```
@@ -126,7 +203,7 @@ beego.NewNamespace("/v1",
 ```
 For more information please check [namespace](http://beego.me/docs/mvc/controller/router.md#namespace)
 
-## Annotation Router
+#### Annotation Router
 ```
 // CMS API
 type CMSController struct {
@@ -149,7 +226,7 @@ func (this *CMSController) AllBlock() {
 ```
 [Annotation Router](http://beego.me/docs/mvc/controller/router.md#annotations)
 
-## Automated API Document
+#### Automated API Document
 Automated document is a very cool feature that I wish to have. Now it became real in Beego. As I said Beego will not only boost the development of API but also make the API easy to use for the user.
 
 The API document can be generated by annotations automatically and can be tested online.
@@ -161,7 +238,7 @@ The API document can be generated by annotations automatically and can be tested
 
 For more information please check [Automated Document](http://beego.me/docs/advantage/docs.md)
 
-## config supports different Runmode
+#### config supports different Runmode
 
 You can set configurations for different Runmode under their own sections. Beego will take the configurations of current Runmode by default. For example:
 
@@ -182,7 +259,8 @@ You can set configurations for different Runmode under their own sections. Beego
 
 The configurations above set up httpport for dev, prod and test environment. Beego will take httpport = 8080 for current runmode "dev".
 
-## Support Two Way Authentication for SSL
+#### Support Two Way Authentication for SSL
+
 ```
 config := tls.Config{
     ClientAuth: tls.RequireAndVerifyClientCert,
@@ -193,39 +271,41 @@ config.Rand = rand.Reader
 
 beego.BeeApp.Server.TLSConfig = &config
 ```
-## beego.Run supports parameter
 
-beego.Run() Run on HttpPort by default
+#### beego.Run supports parameter
 
-beego.Run(":8089")
+`beego.Run()` Run on `HttpPort` by default
 
-beego.Run("127.0.0.1:8089")
+`beego.Run(":8089")`
 
-## Increased XSRFKEY token from 15 characters to 32 characters.
+`beego.Run("127.0.0.1:8089")`
 
-## Removed hot reload
+#### Increased XSRFKEY token from 15 characters to 32 characters.
 
-## Template function supports Config. Get Config value from Template easily.
+#### Removed hot reload
+
+#### Template function supports Config. Get Config value from Template easily.
 
     {{config returnType key defaultValue}}
 
     {{config "int" "httpport" 8080}}
 
-## httplib supports cookiejar. Thanks for curvesft
+#### httplib supports cookiejar. Thanks to curvesft
 
-## orm suports time format. If empty return nil other than 0000.00.00 Thanks for JessonChan
+#### orm suports time format. If empty return nil other than 0000.00.00 Thanks to JessonChan
 
-## config module supports parsing a json array. Thanks for chrisport
+#### config module supports parsing a json array. Thanks to chrisport
 
-## bug fix
+### bug fix
+
 - Fixed static folder infinite loop
 - Fixed typo
 
 
 
-# beego 1.2.0
+# Beego 1.2.0
 
-Hi guys! After the hard working for one month, we released the new awesome version 1.2.0. beego is the fastest Go framework in the latest [Web Framework Benchmarks](http://www.techempower.com/benchmarks/#section=data-r9&hw=i7&test=json) already though our goal is to make beego the best and easiest framework to use. In this new release, we improved even more in both usability and performance which is closer to native Go.
+Hi guys! After one month of hard work, we released the new awesome version 1.2.0. Beego is the fastest Go framework in the latest [Web Framework Benchmarks](http://www.techempower.com/benchmarks/#section=data-r9&hw=i7&test=json) already though our goal is to make Beego the best and easiest framework to use. In this new release, we improved even more in both usability and performance which is closer to native Go.
 
 ### New Features:
 
@@ -248,26 +328,29 @@ Hi guys! After the hard working for one month, we released the new awesome versi
 ```
 
 The code above supports the URL requests below:
-- GET       /v1/notallowed
-- GET       /v1/version
-- GET       /v1/changepassword
-- POST     /v1/changepassword
-- GET       /v1/shop/123
+
+```
+GET       /v1/notallowed
+GET       /v1/version
+GET       /v1/changepassword
+POST      /v1/changepassword
+GET       /v1/shop/123
+```
 
 `namespace` also supports pre-filters, conditions checking and unlimited nested `namespace`
 
 #### 2. Supporting more flexible router modes
 
-Custom functions from RESTFul router
-
-- beego.Get(router, beego.FilterFunc)
-- beego.Post(router, beego.FilterFunc)
-- beego.Put(router, beego.FilterFunc)
-- beego.Head(router, beego.FilterFunc)
-- beego.Options(router, beego.FilterFunc)
-- beego.Delete(router, beego.FilterFunc)
+Custom functions from RESTful router
 
 ```
+beego.Get(router, beego.FilterFunc)
+beego.Post(router, beego.FilterFunc)
+beego.Put(router, beego.FilterFunc)
+beego.Head(router, beego.FilterFunc)
+beego.Options(router, beego.FilterFunc)
+beego.Delete(router, beego.FilterFunc)
+
 beego.Get("/user", func(ctx *context.Context) {
     ctx.Output.Body([]byte("Get userlist"))
 })
@@ -275,7 +358,7 @@ beego.Get("/user", func(ctx *context.Context) {
 
 More flexible Handler
 
-- beego.Handler(router, http.Handler)
+`beego.Handler(router, http.Handler)`
 
 Integrating other services easily
 
@@ -342,11 +425,11 @@ if err != nil {
     t.Fatal(err)
 }
 ```
-httplib also supports custom protocol version
+`httplib` also supports custom protocol version
 
 #### 9. ORM supports all the unexport fields of struct
 
-#### 10. Enable XSRF in controller level. XSRF can only be controlled in the whole project level. However, you may want to have more control for XSRF, so we let you control it in Prepare function in controller level. Defult is true which means using the global setting.
+#### 10. Enable XSRF in controller level. XSRF can only be controlled in the whole project level. However, you may want to have more control for XSRF, so we let you control it in Prepare function in controller level. Default is true which means using the global setting.
 
 ```
 func (a *AdminController) Prepare(){
@@ -371,13 +454,13 @@ func (a *AdminController) Prepare(){
 
 
 
-# beego 1.1.4
+# Beego 1.1.4
 
-Release an emergency version for beego has a serious security problem, please update to the latest version. By the way released all changes together
+This is an emergency release for solving a serious security problem. Please update to the latest version! By the way released all changes together.
 
-1. fixed a security problem. I will show the detail in beego/security.md later.
+1. fixed a security problem. I will show the details in beego/security.md later.
 
-2. statifile move to new file.
+2. `statifile` move to new file.
 
 3. move dependence of the third libs,if you use this module in your application: session/cache/config, please import the submodule of the third libs:
 
@@ -391,38 +474,38 @@ Release an emergency version for beego has a serious security problem, please up
 
 5. improve the FormParse.
 
-released data: 2014-04-08
+released date: 2014-04-08
 
-# beego 1.1.3
+# Beego 1.1.3
 this is a hot fixed:
 
 1. console engine for logs.It will not run if there's no config.
 
-2. beego 1.1.2 support `go run main.go`, but if `main.go` bot abute the beego's project rule,use own AppConfigPath or not exist app.conf will panic.
+2. Beego 1.1.2 support `go run main.go`, but if `main.go` bot abute the Beego's project rule,use own AppConfigPath or not exist app.conf will panic.
 
-3. beego 1.1.2 supports `go test` parse config,but actually when call TestBeegoInit still can't parseconfig
+3. Beego 1.1.2 supports `go test` parse config,but actually when call TestBeegoInit still can't parseconfig
 
-released data: 2014-04-04
+released date: 2014-04-04
 
-# beego 1.1.2
+# Beego 1.1.2
 The improvements:
 
 1. Added ExceptMethodAppend fuction which supports filter out some functions while run autorouter
 2. Supporting user-defined FlashName, FlashSeperator
 3. ORM supports user-defined types such as type MyInt int
 4. Fixed validation module return user-defined validating messages
-5. Improved logs module, added Init processing errors. Changed some unnecessory public fucntion to private
+5. Improved logs module, added Init processing errors. Changed some unnecessory public function to private
 6. Added PostgreSQL engine for session module
 7. logs module supports output caller filename and line number. Added EnableFuncCallDepth function, closed by default.
 8. Fixed bugs of Cookie engine in session module
 9. Improved the error message for templates parsing error
-10. Allowing modifing Context by Filter to skip beego's routering rules and using uder-defined routering rules. Added parameters RunController and RunMethod
-11. Supporting to run beego APP by using `go run main.go`
+10. Allowing modifing Context by Filter to skip Beego's routering rules and using uder-defined routering rules. Added parameters RunController and RunMethod
+11. Supporting to run Beego APP by using `go run main.go`
 12. Supporting to run test cases by using `go test`. Added TestBeegoInit function.
 
-released data: 2014-04-03
+released date: 2014-04-03
 
-# beego 1.1.1
+# Beego 1.1.1
 Added some new features and fixed some bugs in this release.
 
 1. File engine can't delete file in session module which will raise reading failure.
@@ -441,9 +524,9 @@ Added some new features and fixed some bugs in this release.
 14. Supporting sql.Null* type in ORM
 15. Modified auto_now_add which will skip time setting if there is default value.
 
-released data: 2014-03-12
+released date: 2014-03-12
 
-# beego 1.1.0
+# Beego 1.1.0
 Added some new features and fixed some bugs in this release.
 
 New features
@@ -469,9 +552,9 @@ bugfix
 5. Fixed #440 on_delete bug that not getting delted automatically
 6. Fixed #441 timezone bug
 
-released data: 2014-02-10
+released date: 2014-02-10
 
-# beego 1.0 release
+# Beego 1.0 release
 After four months code refactoring, we released the first stable version of Beego. We did a lot of refactoring and improved a lot in detail. Here is the list of the main improvements:
 
 1. Modular design. Right now Beego is a light weight assembling framework with eight powerful stand alone modules including cache, config, logs, sessions, httplibs, toolbox, orm and context. It might have more in the future. You can use all of these stand alone modules in your other applications directly no matter it’s web applications or any other applications such as web games and mobile games.
@@ -492,4 +575,4 @@ After four months code refactoring, we released the first stable version of Beeg
 
 9. Powerful assistance tools. bee is used to assist the development of Beego applications. It can create, compile, package the Beego application easily.
 
-released data: 2013-12-19
+released date: 2013-12-19

@@ -176,7 +176,9 @@ QuerySeter 是高级查询使用的接口，我们来熟悉下他的接口方法
 	* [SetCond(*Condition) QuerySeter](#setcond)
 	* [Limit(int, ...int64) QuerySeter](#limit)
 	* [Offset(int64) QuerySeter](#offset)
+	* [GroupBy(...string) QuerySeter](#groupby)
 	* [OrderBy(...string) QuerySeter](#orderby)
+	* [Distinct() QuerySeter](#distinct)
 	* [RelatedSel(...interface{}) QuerySeter](#relatedsel)
 	* [Count() (int64, error)](#count)
 	* [Exist() bool](#exist)
@@ -223,7 +225,7 @@ qs.Exclude("profile__isnull", true).Filter("name", "slene")
 自定义条件表达式
 
 ```go
-cond := NewCondition()
+cond := orm.NewCondition()
 cond1 := cond.And("profile__isnull", false).AndNot("status__in", 1).Or("profile__age__gt", 2000)
 
 qs := orm.QueryTable("user")
@@ -268,6 +270,13 @@ qs.Offset(20)
 // LIMIT 1000 OFFSET 20
 ```
 
+### GroupBy
+
+```go
+qs.GroupBy("id", "age")
+// GROUP BY id,age
+```
+
 ### OrderBy
 
 参数使用 **expr**
@@ -280,6 +289,15 @@ qs.OrderBy("id", "-profile__age")
 
 qs.OrderBy("-profile__age", "profile")
 // ORDER BY profile.age DESC, profile_id ASC
+```
+
+### Distinct
+	
+对应 sql 的 `distinct` 语句, 返回不重复的值.
+
+```go
+qs.Distinct()
+// SELECT DISTINCT
 ```
 
 ### RelatedSel
@@ -334,7 +352,7 @@ fmt.Printf("Affected Num: %s, %s", num, err)
 ```go
 // 假设 user struct 里有一个 nums int 字段
 num, err := o.QueryTable("user").Update(orm.Params{
-	"nums": orm.ColValue(orm.Col_Add, 100),
+	"nums": orm.ColValue(orm.ColAdd, 100),
 })
 // SET nums = nums + 100
 ```
@@ -342,10 +360,10 @@ num, err := o.QueryTable("user").Update(orm.Params{
 orm.ColValue 支持以下操作
 
 ```go
-Col_Add      // 加
-Col_Minus    // 减
-Col_Multiply // 乘
-Col_Except   // 除
+ColAdd      // 加
+ColMinus    // 减
+ColMultiply // 乘
+ColExcept   // 除
 ```
 
 ### Delete
@@ -507,7 +525,7 @@ if err == nil {
 
 ### ValuesFlat
 
-只返回特定的 Field 值，讲结果集展开到单个 slice 里
+只返回特定的 Field 值，将结果集展开到单个 slice 里
 
 ```go
 var list orm.ParamsList

@@ -27,7 +27,7 @@ func (this *MainController) Get() {
 		this.SetSession("asta", v.(int)+1)
 		this.Data["num"] = v.(int)
 	}
-	this.TplNames = "index.tpl"
+	this.TplName = "index.tpl"
 }
 ```
 
@@ -41,7 +41,7 @@ session 有几个方便的方法：
 
 session 操作主要有设置 session、获取 session、删除 session。
 
-当然你要可以通过下面的方式自己控制相应的逻辑这些逻辑：
+当然你可以通过下面的方式自己控制这些逻辑：
 
 	sess:=this.StartSession()
 	defer sess.SessionRelease()
@@ -126,4 +126,8 @@ sess 对象具有如下方法：
 当 SessionProvider 为 couchbase 时，SessionSavePath 是 couchbase 的链接地址，采用了 [couchbase](https://github.com/couchbaselabs/go-couchbase)，如下所示：
 
 	beego.SessionProvider = "couchbase"
-	beego.SessionSavePath = "http://bucketname:bucketpass@myserver:8091/"			
+	beego.SessionSavePath = "http://bucketname:bucketpass@myserver:8091/"		
+    
+    
+## 特别注意点
+因为session内部采用了gob来注册存储的对象，例如struct，所以如果你采用了非memory的引擎，请自己在main.go的init里面注册需要保存的这些结构体，不然会引起应用重启之后出现无法解析的错误    	

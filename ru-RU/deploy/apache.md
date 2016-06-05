@@ -1,9 +1,9 @@
 ---
-name: Deploy with Apache
+name: Развертывание с Apache
 sort: 4
 ---
 
-# Конфигурация для Apache
+# Конфигурирование Apache
 
 Концепция Apache сильно похожа на nginx, работает как reverse proxy :TODO и посылаем запросы на бэкэнд. Пример конфигурации:
 

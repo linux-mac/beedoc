@@ -86,12 +86,12 @@ func (this *MainController) Post() {
 2. 在 Controller 中
 
 ```go
-func (this *ObejctController) Post() {
+func (this *ObjectController) Post() {
 	var ob models.Object
 	json.Unmarshal(this.Ctx.Input.RequestBody, &ob)
 	objectid := models.AddOne(ob)
 	this.Data["json"] = "{\"ObjectId\":\"" + objectid + "\"}"
-	this.ServeJson()
+	this.ServeJSON()
 }
 ```
 
@@ -115,13 +115,27 @@ Beego 提供了两个很方便的方法来处理文件上传：
 
 - SaveToFile(fromfile, tofile string) error
 
-	该方法是在 GetFile 的基础上实现了快速保存的功能
+	该方法是在 GetFile 的基础上实现了快速保存的功能 
+	fromfile 是提交时候的html表单中的name
+	
+```html
+<form enctype="multipart/form-data" method="post">
+	<input type="file" name="uploadname" />
+	<input type="submit">
+</form>
+```
 
 保存的代码例子如下：
 
 ```go
-func (this *MainController) Post() {
-	this.SaveToFile("the_file","/var/www/uploads/uploaded_file.txt")
+func (c *FormController) Post() {
+	f, h, err := c.GetFile("uploadname")
+	defer f.Close()
+	if err != nil {
+		fmt.Println("getfile err ", err)
+	} else {
+		c.SaveToFile("uploadname", "/www/"+h.Filename)
+	}
 }
 ```
 
@@ -133,20 +147,20 @@ func (this *MainController) Post() {
 
 ```		
 var id int  
-ctx.Input.Bind(&id, "id")  //id ==123
+this.Ctx.Input.Bind(&id, "id")  //id ==123
 
 var isok bool  
-ctx.Input.Bind(&isok, "isok")  //isok ==true
+this.Ctx.Input.Bind(&isok, "isok")  //isok ==true
 
 var ft float64  
-ctx.Input.Bind(&ft, "ft")  //ft ==1.2
+this.Ctx.Input.Bind(&ft, "ft")  //ft ==1.2
 
 ol := make([]int, 0, 2)  
-ctx.Input.Bind(&ol, "ol")  //ol ==[1 2]
+this.Ctx.Input.Bind(&ol, "ol")  //ol ==[1 2]
 
 ul := make([]string, 0, 2)  
-ctx.Input.Bind(&ul, "ul")  //ul ==[str array]
+this.Ctx.Input.Bind(&ul, "ul")  //ul ==[str array]
 
 user struct{Name}  
-ctx.Input.Bind(&user, "user")  //user =={Name:"astaxie"}
+this.Ctx.Input.Bind(&user, "user")  //user =={Name:"astaxie"}
 ```

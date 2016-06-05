@@ -18,7 +18,7 @@ Then you can use these functions in template:
 
 	{{.Content | hi}}
 
-Here are Beego's buildin template functions:
+Here are Beego's built-in template functions:
 
 * dateformat
 
@@ -30,11 +30,11 @@ Here are Beego's buildin template functions:
 
 * compare
 
-  Compare two objects. If they are same return true otherwise return false. {{compare .A .B}}
+  Compare two objects. If they are the same return true otherwise return false. {{compare .A .B}}
 
 * substr
 
-  Return sub string. support UTF-8 string. {{substr .Str 0 30}}
+  Return sub string. supports UTF-8 string. {{substr .Str 0 30}}
 
 * html2str
 
@@ -54,3 +54,39 @@ Here are Beego's buildin template functions:
 * renderform
 
   Generate form from StructTag. {{&struct | renderform}}
+  	
+* assets_js
+
+    Create a `<script>` tag from js src. {{assets_js src}}
+
+* assets_css
+
+    Create a `<link>` tag from css src. {{assets_css src}}
+
+* config
+
+    Get the value of AppConfig. {{config configType configKey defaultValue}}. configType must be String, Bool, Int, Int64, Float, or DIY
+
+* map_get
+
+    Get value of `map` by key
+
+        // In controller
+        Data["m"] = map[string]interface{} {
+            "a": 1,
+            "1": map[string]float64{
+                "c": 4,
+            },
+        }
+
+        // In view
+        {{ map_get m "a" }} // return 1
+        {{ map_get m 1 "c" }} // return 4
+        
+* urlfor
+
+    Get the URL of a controller method
+   
+        {{urlfor "TestController.List"}}
+        
+    [详见](zh-CN/mvc/controller/urlbuilding.md#how-to-use-in-template)

@@ -1,11 +1,11 @@
 ---
-name: Todo List
+name: To-do List
 sort: 3
 ---
 
-# Todo List
+# To-do List
 
-An angularJS + beego project
+An AngularJS + Beego project
 
 ```bash
  bee new todo

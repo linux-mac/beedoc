@@ -8,7 +8,7 @@ sort: 2
 什么是路由设置呢？前面介绍的 MVC 结构执行时，介绍过 beego 存在三种方式的路由:固定路由、正则路由、自动路由，接下来详细的讲解如何使用这三种路由。
 
 ## 基础路由
-从beego1.2版本开始支持了基本的RESTFul函数式路由,应用中的大多数路由都会定义在 `routers/router.go` 文件中。最简单的beego路由由URI和闭包函数组成。
+从beego1.2版本开始支持了基本的RESTful函数式路由,应用中的大多数路由都会定义在 `routers/router.go` 文件中。最简单的beego路由由URI和闭包函数组成。
 
 ### 基本 GET 路由
 
@@ -91,7 +91,7 @@ beego.Handler("/rpc", s)
 
 	自定义正则匹配 //匹配 /api/123 :id = 123
 
-- beego.Router("/user/:username([\w]+)", &controllers.RController{})
+- beego.Router("/user/:username([\\w]+)", &controllers.RController{})
 
 	正则字符串匹配 //匹配 /user/astaxie :username = astaxie
 
@@ -155,7 +155,7 @@ beego.Handler("/rpc", s)
 
 可用的 HTTP Method：
 
-* *：包含一下所有的函数
+* *：包含以下所有的函数
 * get ：GET 请求
 * post ：POST 请求
 * put ：PUT 请求
@@ -190,7 +190,7 @@ beego.Handler("/rpc", s)
 	/controller/simple
 	/controller/simple.html
 	/controller/simple.json
-	/controller/simple.rss
+	/controller/simple.xml
 	
 可以通过 `this.Ctx.Input.Param(":ext")` 获取后缀名。
 

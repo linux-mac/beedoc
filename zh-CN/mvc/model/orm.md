@@ -22,12 +22,20 @@ type User struct {
 	Id          int
 	Name        string
 	Profile     *Profile   `orm:"rel(one)"` // OneToOne relation
+	Post    	[]*Post `orm:"reverse(many)"` // 设置一对多的反向关系
 }
 
 type Profile struct {
 	Id          int
 	Age         int16
-	User        *User   `orm:"reverse(one)"` // 设置反向关系(可选)
+	User        *User   `orm:"reverse(one)"` // 设置一对一反向关系(可选)
+}
+
+type Post struct {
+    Id    int
+    Title string
+    User  *User  `orm:"rel(fk)"`	//设置一对多关系
+    Tags  []*Tag `orm:"rel(m2m)"`
 }
 
 func init() {
@@ -48,7 +56,7 @@ import (
 )
 
 func init() {
-	orm.RegisterDriver("mysql", orm.DR_MySQL)
+	orm.RegisterDriver("mysql", orm.DRMySQL)
 
 	orm.RegisterDataBase("default", "mysql", "root:root@/orm_test?charset=utf8")
 }
@@ -88,6 +96,12 @@ import (
 三种默认数据库类型
 
 ```go
+// For version 1.6
+orm.DRMySQL
+orm.DRSqlite
+orm.DRPostgres
+
+// < 1.6
 orm.DR_MySQL
 orm.DR_Sqlite
 orm.DR_Postgres
@@ -98,7 +112,7 @@ orm.DR_Postgres
 // 参数2   数据库类型
 // 这个用来设置 driverName 对应的数据库类型
 // mysql / sqlite3 / postgres 这三种是默认已经注册过的，所以可以无需设置
-orm.RegisterDriver("mymysql", orm.DR_MySQL)
+orm.RegisterDriver("mymysql", orm.DRMySQL)
 ```
 
 #### RegisterDataBase
@@ -341,13 +355,13 @@ o1 := orm.NewOrm()
 o1.Using("db1")
 dr := o1.Driver()
 fmt.Println(dr.Name() == "db1") // true
-fmt.Println(dr.Type() == orm.DR_MySQL) // true
+fmt.Println(dr.Type() == orm.DRMySQL) // true
 
 o2 := orm.NewOrm()
 o2.Using("db2")
 dr = o2.Driver()
 fmt.Println(dr.Name() == "db2") // true
-fmt.Println(dr.Type() == orm.DR_Sqlite) // true
+fmt.Println(dr.Type() == orm.DRSqlite) // true
 ```
 
 ## 调试模式打印查询语句

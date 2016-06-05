@@ -1,211 +1,211 @@
 ---
-name: Context Module
+name: Модуль Контекст
 sort: 5
 ---
 
-# Context Module
+# Модуль Контекст
 
-Context is a encapsulation for http request and response. Context module provides Input object for user input which is request and Output object for output which response.
+Контекст - обертка для работы с http запросами и ответами. Модуль Контекст предоставляет входной объект который который является запросоом (request) и выходной объект который является ответом (response).
 
-## Context Object
+## Объект контекст 
 
-Here are the functions encapsulated for input and output in context object.
+Ниже функции которые предоставлены для входного и выходного объекта контекста.
 - Redirect
 - Abort
 - WriteString
 - GetCookie
 - SetCookie
 
-Context object is the parameter of Filter function so that you can use filter to manipulate it or finish the process in advance.
+Объект контекста является параметром функции Filter, таким образом вы можете использовать фильтр чтобы управлять процессом или завершить его предварительно.
 
-## Input Object
+## Входной объект
 
-Input object is the encapsulation of request. Here are the implemented methods:
+Входной объект представляет собой обертку для запроса (request). Реализованные методы:
 
 - Protocol
 
-  Get request protocol. E.g.: `HTTP/1.0`
+  Получить протокол запроса. E.g.: `HTTP/1.0`
 	
 - Uri
 
-  The RequestURI of request. E.g.: `/hi`
+  RequestURI запроса. E.g.: `/hi`
 	
 - Url
 
-  The URL of request. E.g.: `http://beego.me/about?username=astaxie`
+  URL запроса. E.g.: `http://beego.me/about?username=astaxie`
 	
 - Site
 
-  The combination of scheme and domain. E.g.: `http://beego.me`
+  Комбинация протокола и домена. E.g.: `http://beego.me`
 
 - Scheme
   
-  The request scheme. E.g.: `http`, `https`
+  Схема. E.g.: `http`, `https`
 	
 - Domain
 
-  The request domain. E.g.: `beego.me`
+  Домен. E.g.: `beego.me`
 	
 - Host
 
-  The request domain. Same as Domain.
+  Домен запроса. Тоже самое что и Domain.
 	
 - Method
 
-  The request method. It's standard http request method. E.g.: `GET`, `POST,
+  HTTP метод запроса. Это стандартный HTTP метод. E.g.: `GET`, `POST,
 	
 - Is
 
-  Test if it's a http method. E.g.: `Is('GET')` will return true or false
+  Проверка HTTP метода. E.g.: `Is('GET')` вернет true или false
 	
 - IsAjax
 
-  Test if it's a ajax request. Return true or false.
+  Проверка того что является ли запрос AJAX запросом. Вернет true или false.
 	
 - IsSecure
 
-  Test if the request is a https request. Return true or false.
+  Проверка на что запрос использует https. Вернет true или false.
 	
 - IsWebsocket
 
-  Test if the request is a Websocket request. Return true or false.
+  Проверка того что является ли запрос Websocket запросом. Вернет true или false.
 	
 - IsUpload
 
-  Test if there is file uploaded in the request. Return true or false.
+  Провека того что файл был загружен в запросе. Вернет true или false.
 	
 - IP
 
-  Return the IP of the request user. If the user is using proxy, it will get the real IP recursively.
+  Вернет IP пользователя из запроса. Если пользователь использует прокси, вы получите реальный IP рекурсивно.
 	
 - Proxy
 
-  Return all IP addresses of the proxy request.
+  Вернет IP всех запросов proxy.
 	
 - Refer
 
-  Return the refer of the request.
+  Вернет Refer из запроса.
 	
 - SubDomains
 
-  Return the root domain of request. For example, request domain is `blog.beego.me`, then this function returns `beego.me`.
+  Вернет родительский домен из запроса. Например, домен в запросе `blog.beego.me`, тогда функция вернет `beego.me`.
 	
 - Port
 
-  Return the port of request. E.g.: 8080
+  Вернет порт из запроса. E.g.: 8080
 	
 - UserAgent
 
-  Return `UserAgent` of request. E.g.: `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36`
+  Вернет `UserAgent` из запроса. E.g.: `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36`
 
 - Param
   
-  Can be set in router config. Userd to get those params. E.g.: `Param(":id")` return 12
+  Может быть установлент в конфиге router. Используйте что получить эти параметры. E.g.: `Param(":id")` вернут 12
 	
 - Query
 
-  Return all params in GET and POST requests. This is similar as `$_REQUEST` in PHP
+  Вернет все параметры из GET и POST запросов. Это тоже самое что и `$_REQUEST` в PHP
 	
 - Header
 
-  Return request header. E.g.: `Header("Accept-Language")` will return the value in request header, E.g.: `zh-CN,zh;q=0.8,en;q=0.6`
+  Вернет заголовки запроса. E.g.: `Header("Accept-Language")` вернет значение из запрашиваемоего заголовка, E.g.: `zh-CN,zh;q=0.8,en;q=0.6`
 	
 - Cookie
 
-  Return request Cookie. E.g.: `Cookie("username")` will return the value of username in cookies
+  Вернут куки из запроса. E.g.: `Cookie("username")` вернут значение username из куки
 	
 - Session
 
-  You can be initialized session. It is Session object in session module of Beego. Return the related data stored in server.
+  Вы можете инициализировать сессию. Это объект Session object из мудуля сессии BeeGo. Вернут связанные данные лежащие на серевер.
 	
 - Body
   
-  Return request body. E.g.: in API application request send JSON data and it can't be retrieved by Query. You need use Body to get the JSON data.
+  Вернут тело запроса. E.g.: В API приложениях запрос отправляет JSON данные и они НЕ могут быть извлечены с Query. Вы должны использовать Body чтобы получить JSON данные.
 	
 - GetData
 
-  Get value of `Data` in `Input`
+  Получить значение `Data` в `Input`
 	
 - SetData			
 
-  Set value of `Data` in `Input`. `GetData` and `SetData` is used to pass data from Filter to Controller.
+  Установить значение `Data` в `Input`. `GetData` и `SetData` используются чтобы передать данные из Filter в Controller.
 	
-## Output Object
+## Выходной объект
 
-Output object is the encapsulation of request. Here are the implemented methods:
+Выходной объект представляет собой обертку для ответа (response). Реализованные методы:
 
 - Header
 
-  Set response header. E.g.: `Header("Server","beego")`
+  Установливает заголовки ответу. E.g.: `Header("Server","beego")`
 	
 - Body
 
-  Set response body. E.g.: `Body([]byte("astaxie"))`
+  Установливает тело ответа. E.g.: `Body([]byte("astaxie"))`
 
 - Cookie
 
-  Set response cookie. E.g.: `Cookie("sessionID","beegoSessionID")`
+  Установливает куки ответу. E.g.: `Cookie("sessionID","beegoSessionID")`
 	
 - Json
 
-  Parse Data into JSON and call `Body` to return it.
+  Распарсит данные в JSON и вызовет метод `Body` (описан выше) чтобы вернуть тело.
 	
 - Jsonp
 
-  Parse Data into JSONP and call `Body` to return it.
+  Распарсит данные в JSONP и вызовет метод `Body` (описан выше) чтобы вернуть тело.
 	
 - Xml
 
-  Parse Data into XML and call `Body` to return it.
+  Распарсит данные в XML и вызовет метод `Body`  (описан выше) чтобы вернуть его.
 	
 - Download
 
-  Pass in file path and output file.
+  Пройдет по пути и выдаст содержимое файл.
 	
 - ContentType
 
-  Set response ContentType
+  Установит ContentType ответа
 	
 - SetStatus
 
-  Set response status
+  Установит статус ответа
 	
 - Session
 
-  Set the value will be stored in server. E.g.: `Session("username","astaxie")`. Then it can be read later.
+  Установит значение которое будет сохраненено на сервер. E.g.: `Session("username","astaxie")`. И может быть считано позднее.
 	
 - IsCachable
 
-  Test if it's a cacheable status based on status.
+  Проверит закешировано ли содержимое.
 	
 - IsEmpty
 
-  Test if output is empty based on status.
+  Проверит пустой ли вывод.
 	
 - IsOk
 
-  Test if response is 200 based on status.
+  Проверит возвращен ли HTTP статус 200.
 
 - IsSuccessful
 
-  Test if response is successful based on status.
+  Проверит успешно ли завершен запрос.
 		
 - IsRedirect
 
-  Test if response is redirected based on status.
+  Проверит перенаправлен ли ответ.
 
 - IsForbidden
 
-  Test if response is forbidden based on status.
+  Проверит статус ответа Forbidden или нет.
 	
 - IsNotFound
 
-  Test if response is forbidden based on status.
+  Проверит статус ответа NotFound или нет.
 	
 - IsClientError
 
-  Test if response is client error based on status.
+  Проверит есть ли ошибка на стороне клиента или нет.
 	
 - IsServerError
 
-  Test if response is server error based on status.
+  Проверит есть ли ошибка на стороне сервера или нет.
